@@ -1,0 +1,37 @@
+From 79b56618237d54ff302d9eef1c0c44ee980fe1a2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Elan=20Ruusam=C3=A4e?= <glen@delfi.ee>
+Date: Sat, 3 Nov 2018 20:54:12 +0200
+Subject: [PATCH 2/2] include sys/sysmacros.h for makedev definition
+
+---
+ src/archive.c  | 1 +
+ src/database.c | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/src/archive.c b/src/archive.c
+index 059f3ff..9ad5835 100644
+--- a/src/archive.c
++++ b/src/archive.c
+@@ -21,6 +21,7 @@
+ #include <sys/wait.h>
+ #include <sys/stat.h>
+ #include <sys/xattr.h>
++#include <sys/sysmacros.h>
+ #include <limits.h>
+ #include <stdint.h>
+ #include <stdlib.h>
+diff --git a/src/database.c b/src/database.c
+index 92c4793..0f3c87e 100644
+--- a/src/database.c
++++ b/src/database.c
+@@ -27,6 +27,7 @@
+ #include <sys/stat.h>
+ #include <sys/mount.h>
+ #include <sys/statvfs.h>
++#include <sys/sysmacros.h>
+ #include <linux/magic.h>
+ 
+ #include "apk_defines.h"
+-- 
+2.19.1
+

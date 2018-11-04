@@ -1,0 +1,67 @@
+From d409acef489f9c96cd0566b2427760fda2a57221 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Elan=20Ruusam=C3=A4e?= <glen@delfi.ee>
+Date: Sat, 3 Nov 2018 20:53:39 +0200
+Subject: [PATCH 1/2] fix strncpy bounds errors
+
+error: 'strncpy' specified bound 4096 equals destination size [-Werror=stringop-truncation]
+---
+ libfetch/http.c |  3 ++-
+ src/archive.c   | 12 ++++++++----
+ src/database.c  |  3 ++-
+ 3 files changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/libfetch/http.c b/libfetch/http.c
+index 638c9a8..de43a36 100644
+--- a/libfetch/http.c
++++ b/libfetch/http.c
+@@ -499,7 +499,8 @@ http_parse_mtime(const char *p, time_t *mtime)
+ 	char locale[64], *r;
+ 	struct tm tm;
+ 
+-	strncpy(locale, setlocale(LC_TIME, NULL), sizeof(locale));
++	strncpy(locale, setlocale(LC_TIME, NULL), sizeof(locale) - 1);
++	locale[sizeof(locale) - 1] = '\0';
+ 	setlocale(LC_TIME, "C");
+ 	r = strptime(p, "%a, %d %b %Y %H:%M:%S GMT", &tm);
+ 	/* XXX should add support for date-2 and date-3 */
+diff --git a/src/archive.c b/src/archive.c
+index f3a66c2..059f3ff 100644
+--- a/src/archive.c
++++ b/src/archive.c
+@@ -385,11 +385,15 @@ int apk_tar_write_entry(struct apk_ostream *os, const struct apk_file_info *ae,
+ 		else
+ 			return -1;
+ 
+-		if (ae->name != NULL)
+-			strncpy(buf.name, ae->name, sizeof(buf.name));
++		if (ae->name != NULL) {
++			strncpy(buf.name, ae->name, sizeof(buf.name) - 1);
++			buf.name[sizeof(buf.name) - 1] = '\0';
++		}
+ 
+-		strncpy(buf.uname, ae->uname ?: "root", sizeof(buf.uname));
+-		strncpy(buf.gname, ae->gname ?: "root", sizeof(buf.gname));
++		strncpy(buf.uname, ae->uname ?: "root", sizeof(buf.uname) - 1);
++		buf.uname[sizeof(buf.uname) - 1] = '\0';
++		strncpy(buf.gname, ae->gname ?: "root", sizeof(buf.gname) - 1);
++		buf.gname[sizeof(buf.gname) - 1] = '\0';
+ 
+ 		PUT_OCTAL(buf.size, ae->size);
+ 		PUT_OCTAL(buf.uid, ae->uid);
+diff --git a/src/database.c b/src/database.c
+index 91fcedd..92c4793 100644
+--- a/src/database.c
++++ b/src/database.c
+@@ -2778,7 +2778,8 @@ static int apk_db_unpack_pkg(struct apk_database *db,
+ 		if (!(pkg->repos & db->local_repos))
+ 			need_copy = TRUE;
+ 	} else {
+-		strncpy(file, pkg->filename, sizeof(file));
++		strncpy(file, pkg->filename, sizeof(file) - 1);
++		file[sizeof(file) - 1] = '\0';
+ 		need_copy = TRUE;
+ 	}
+ 	if (!apk_db_cache_active(db))
+-- 
+2.19.1
+
