@@ -14,7 +14,7 @@ Patch0:		0001-fix-strncpy-bounds-errors.patch
 Patch1:		0002-include-sys-sysmacros.h-for-makedev-definition.patch
 Patch2:		0001-add-support-for-openssl-1.1.patch
 URL:		https://git.alpinelinux.org/cgit/apk-tools/
-BuildRequires:	lua52-devel
+%{?with_lua:BuildRequires:	lua52-devel}
 BuildRequires:	openssl-devel
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
