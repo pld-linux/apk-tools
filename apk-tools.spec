@@ -4,16 +4,15 @@
 
 Summary:	Alpine Package Keeper - package manager for alpine
 Name:		apk-tools
-Version:	2.10.1
+Version:	2.10.3
 Release:	1
 License:	GPL v2
 Group:		Base
 Source0:	https://dev.alpinelinux.org/archive/apk-tools/%{name}-%{version}.tar.xz
-# Source0-md5:	d14969082e880bd056644f73ac3b3eb2
+# Source0-md5:	deecb1be266f02279b8eeba74e60772a
 Patch0:		0001-fix-strncpy-bounds-errors.patch
 Patch1:		0002-include-sys-sysmacros.h-for-makedev-definition.patch
-Patch2:		0001-add-support-for-openssl-1.1.patch
-URL:		https://git.alpinelinux.org/cgit/apk-tools/
+URL:		https://git.alpinelinux.org/apk-tools/
 %{?with_lua:BuildRequires:	lua52-devel}
 BuildRequires:	openssl-devel
 BuildRequires:	tar >= 1:1.22
@@ -36,7 +35,6 @@ Lua module for apk-tools.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 %build
 generate_config() {
