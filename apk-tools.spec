@@ -5,7 +5,7 @@
 Summary:	Alpine Package Keeper - package manager for alpine
 Name:		apk-tools
 Version:	2.10.3
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Base
 Source0:	https://dev.alpinelinux.org/archive/apk-tools/%{name}-%{version}.tar.xz
