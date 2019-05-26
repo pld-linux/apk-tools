@@ -5,7 +5,7 @@
 Summary:	Alpine Package Keeper - package manager for alpine
 Name:		apk-tools
 Version:	2.10.3
-Release:	2
+Release:	3
 License:	GPL v2
 Group:		Base
 Source0:	https://dev.alpinelinux.org/archive/apk-tools/%{name}-%{version}.tar.xz
@@ -52,6 +52,8 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/apk/{keys,protected_paths.d}
+
 # empty file
 %{__rm} $RPM_BUILD_ROOT%{_docdir}/apk/README
 
@@ -60,6 +62,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%dir %{_sysconfdir}/apk
+%dir %{_sysconfdir}/apk/keys
+%dir %{_sysconfdir}/apk/protected_paths.d
 %attr(755,root,root) %{_sbindir}/apk
 
 %if %{with lua}
