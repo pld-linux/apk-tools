@@ -4,14 +4,13 @@
 
 Summary:	Alpine Package Keeper - package manager for alpine
 Name:		apk-tools
-Version:	2.10.3
-Release:	3
+Version:	2.10.5
+Release:	1
 License:	GPL v2
 Group:		Base
 Source0:	https://dev.alpinelinux.org/archive/apk-tools/%{name}-%{version}.tar.xz
-# Source0-md5:	deecb1be266f02279b8eeba74e60772a
-Patch0:		0001-fix-strncpy-bounds-errors.patch
-Patch1:		0002-include-sys-sysmacros.h-for-makedev-definition.patch
+# Source0-md5:	6ae9263da44456776ff4836ad5b4c571
+Patch0:		no-Werror.patch
 URL:		https://git.alpinelinux.org/apk-tools/
 %{?with_lua:BuildRequires:	lua52-devel}
 BuildRequires:	openssl-devel
@@ -34,7 +33,6 @@ Lua module for apk-tools.
 %prep
 %setup -q
 %patch0 -p1
-%patch1 -p1
 
 %build
 generate_config() {
@@ -45,11 +43,15 @@ cat <<-EOF
 EOF
 }
 generate_config > config.mk
-%{__make}
+%{__make} \
+	V=1 \
+	CFLAGS="%{rpmcflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__make} install \
+	V=1 \
+	CFLAGS="%{rpmcflags}" \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/apk/{keys,protected_paths.d}
