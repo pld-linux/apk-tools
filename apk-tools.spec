@@ -32,7 +32,7 @@ Lua module for apk-tools.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P0 -p1
 
 %build
 generate_config() {
